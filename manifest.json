@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Receipt Generator",
+  "description": "Generates a receipt for DMV purposes",
+  "version": "1.0",
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["./content.js"],
+      "matches": ["file://*"]
+    }
+  ],
+  "action": {
+    "default_title": "Generate Receipt",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "permissions": ["storage"]
+}
