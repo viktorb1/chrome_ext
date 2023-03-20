@@ -15,10 +15,20 @@
       "matches": ["file://*"]
     }
   ],
+  "background": {
+    "service_worker": "src/scripts/background-script.ts",
+    "persistent": false
+  },
   "action": {
     "default_title": "Generate Receipt",
     "default_popup": "popup.html"
   },
   "options_page": "options.html",
-  "permissions": ["storage"]
+  "permissions": ["storage", "tabs", "activeTab", "downloads"],
+  "web_accessible_resources": [
+    {
+      "resources": ["template.csv"],
+      "matches": ["file://*"]
+    }
+  ]
 }

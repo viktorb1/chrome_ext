@@ -14,4 +14,13 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "popup.html"),
+        options: resolve(__dirname, "options.html"),
+        applet: resolve(__dirname, "applet.html"),
+      },
+    },
+  },
 });
