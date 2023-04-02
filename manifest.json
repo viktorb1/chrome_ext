@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "js": ["src/scripts/content-script.ts"],
-      "matches": ["file://*"]
+      "matches": ["https://ca.dtrts.com/*"]
     }
   ],
   "background": {
@@ -24,11 +24,5 @@
     "default_popup": "popup.html"
   },
   "options_page": "options.html",
-  "permissions": ["storage", "tabs", "activeTab", "downloads"],
-  "web_accessible_resources": [
-    {
-      "resources": ["template.csv"],
-      "matches": ["file://*"]
-    }
-  ]
+  "permissions": ["storage", "tabs", "activeTab", "downloads"]
 }

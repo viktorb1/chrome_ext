@@ -69,8 +69,6 @@ watchEffect(async () => {
 
 onUnmounted(() => chrome.storage.local.get(["current"], () => ""));
 
-let requested_in_past = false;
-
 if (!items_view.value || !data.value) {
   chrome.storage.local.get(null, (items) => {
     let latestDateObject = null;

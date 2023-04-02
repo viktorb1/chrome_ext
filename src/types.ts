@@ -1,4 +1,4 @@
-interface MyData {
+export interface MyData {
   date: string;
   firstName: string;
   lastName: string;
@@ -8,5 +8,3 @@ interface MyData {
   transactionId: string;
   vin: string;
 }
-
-export { type MyData };

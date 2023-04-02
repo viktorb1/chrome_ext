@@ -6,9 +6,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .textContent?.trim();
 
     if (registrationType == "Transfer In-State") {
-      const vin = document.querySelector(
-        '.form-group label[for="transfer-vehicle-vin"] + div p'
-      )!.textContent;
+      const vin = document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static")[3].textContent
+
       const serviceFees = document.querySelector(
         "#page_modal-collapse-total-other-list dt#label-oth-serv-fee + dd"
       )!.textContent;
