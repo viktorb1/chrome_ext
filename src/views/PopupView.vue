@@ -2,7 +2,7 @@
 import { ref } from "vue";
 
 chrome.tabs.query({ active: true, currentWindow: true }, ([res]) => {
-  if (res && res.url?.startsWith(import.meta.env.VITE_URL_PATH)) {
+  if (res && res.url.startsWith(import.meta.env.VITE_URL_PATH)) {
     if (res && res.id) {
       console.log("sending");
       chrome.tabs.sendMessage(res.id, "clicked-action-button");

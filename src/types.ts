@@ -1,10 +1,12 @@
-export interface MyData {
+export interface HTMLData {
   date: string;
-  firstName: string;
-  lastName: string;
-  registrationType: string;
-  serviceFees: string;
-  totalAch: string;
-  transactionId: string;
   vin: string;
+  serviceFees: string;
+  totalDMV: string;
+  totalAch: string;
+  lastName: string;
+  firstName: string;
+  transactionId: string;
+  totalProcessing: string;
+  registrationType: string;
 }

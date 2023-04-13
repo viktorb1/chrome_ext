@@ -13,21 +13,16 @@ const printDocument = () => {
         </router-link>
       </div>
       <div class="mr-20 flex h-full items-center">
-        <router-link
-          class="mx-1 flex h-full w-fit items-center justify-center px-3 text-2xl text-white hover:bg-sky-700"
-          to="/"
-          ><font-awesome-icon icon="fa-folder-open"
-        /></router-link>
-        <div
-          @click="printDocument"
-          class="mx-1 flex h-full w-fit cursor-pointer items-center justify-center px-3 text-2xl text-white hover:bg-sky-700"
-        >
+        <router-link class="mx-1 flex h-full w-fit items-center justify-center px-3 text-2xl text-white hover:bg-sky-700"
+          to="/"><font-awesome-icon icon="fa-folder-open" /></router-link>
+        <div @click="printDocument"
+          class="mx-1 flex h-full w-fit cursor-pointer items-center justify-center px-3 text-2xl text-white hover:bg-sky-700">
           <font-awesome-icon icon="fa-print" />
         </div>
       </div>
     </div>
     <Suspense>
-      <router-view id="please_work" />
+      <router-view />
     </Suspense>
   </main>
 </template>

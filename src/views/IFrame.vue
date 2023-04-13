@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, watchEffect, onUnmounted } from "vue";
-import { generateDateString } from "../utils/util.js";
-import { MyData } from "../types";
+import { generateDateString } from "../utils/common";
+import { HTMLData } from "../types"
 let formattedDate = ref("");
 
 const tid: string = await new Promise((resolve) => {
-  chrome.storage.local.get(["current"], (item) => {
+  chrome.storage.sync.get(["current"], (item) => {
     resolve(item.current);
   });
 });
@@ -13,7 +13,7 @@ const tid: string = await new Promise((resolve) => {
 let items_view = ref(
   JSON.parse(
     await new Promise((resolve) => {
-      chrome.storage.local.get([`view_${tid}`], (item) => {
+      chrome.storage.sync.get([`view_${tid}`], (item) => {
         if (item[`view_${tid}`] === undefined) {
           resolve("[]");
         } else {
@@ -24,9 +24,9 @@ let items_view = ref(
   )
 );
 
-let data = ref<MyData>(
+let data = ref<HTMLData>(
   await new Promise((resolve) => {
-    chrome.storage.local.get([`data_${tid}`], (item) => {
+    chrome.storage.sync.get([`data_${tid}`], (item) => {
       if (item[`data_${tid}`] === undefined) {
         resolve(null);
       } else {
@@ -61,16 +61,16 @@ const addNewRow = () => {
 watchEffect(async () => {
   if (items_view.value.length != 0) {
     const keyName = "view_" + data.value.transactionId;
-    chrome.storage.local.set({ [keyName]: JSON.stringify(items_view.value) });
+    chrome.storage.sync.set({ [keyName]: JSON.stringify(items_view.value) });
     const keyNameData = "data_" + data.value.transactionId;
-    chrome.storage.local.set({ [keyNameData]: JSON.stringify(data.value) });
+    chrome.storage.sync.set({ [keyNameData]: JSON.stringify(data.value) });
   }
 });
 
-onUnmounted(() => chrome.storage.local.get(["current"], () => ""));
+onUnmounted(() => chrome.storage.sync.get(["current"], () => ""));
 
 if (!items_view.value || !data.value) {
-  chrome.storage.local.get(null, (items) => {
+  chrome.storage.sync.get(null, (items) => {
     let latestDateObject = null;
     let latestDate = null;
 
@@ -86,12 +86,7 @@ if (!items_view.value || !data.value) {
       {
         item: "DMV Fees",
         subitem: latestDateObject.registrationType,
-        cost: latestDateObject.totalAch,
-      },
-      {
-        item: "DMV Processing Fee",
-        subitem: null,
-        cost: latestDateObject.totalProcessing,
+        cost: latestDateObject.totalDMV,
       },
       {
         item: "Service Fees",
@@ -99,6 +94,14 @@ if (!items_view.value || !data.value) {
         cost: latestDateObject.serviceFees,
       }
     );
+
+    if (latestDateObject.registrationType !== "Renewal") {
+      items_view.value.push({
+        item: "DMV Processing Fee",
+        subitem: null,
+        cost: latestDateObject.totalProcessing,
+      })
+    }
 
     data.value = latestDateObject;
     console.log("generating date");
@@ -108,11 +111,8 @@ if (!items_view.value || !data.value) {
 </script>
 
 <template>
-  <div
-    v-if="data"
-    id="print-view"
-    class="m-20 mx-auto flex h-letter-height w-letter-width flex-col rounded-lg border-2 border-gray-400 bg-white p-one-inch print:m-0 print:h-full print:border-none"
-  >
+  <div v-if="data" id="print-view"
+    class="m-20 mx-auto flex h-letter-height w-letter-width flex-col rounded-lg border-2 border-gray-400 bg-white p-one-inch print:m-0 print:h-full print:border-none">
     <!-- Header -->
     <header>
       <div class="flex justify-between pb-5">
@@ -135,11 +135,7 @@ if (!items_view.value || !data.value) {
           <input v-model="formattedDate" class="bg-transparent" />
         </div>
         <div class="text-base">
-          <strong>Invoice No:</strong
-          ><input
-            v-model="data.transactionId"
-            class="w-24 bg-transparent text-end"
-          />
+          <strong>Invoice No:</strong><input v-model="data.transactionId" class="w-24 bg-transparent text-end" />
         </div>
       </div>
       <hr />
@@ -178,19 +174,13 @@ if (!items_view.value || !data.value) {
                 <template v-for="item in items_view">
                   <tr>
                     <td class="w-9/12 pl-5">
-                      <input
-                        v-model="item.item"
-                        class="w-full bg-transparent"
-                      />
+                      <input v-model="item.item" class="w-full bg-transparent" />
                     </td>
                     <td class="flex justify-end p-2">
                       <input value="1" class="w-6 bg-transparent text-end" />
                     </td>
                     <td class="p-2 text-end">
-                      <input
-                        v-model="item.cost"
-                        class="w-16 bg-transparent text-end"
-                      />
+                      <input v-model="item.cost" class="w-16 bg-transparent text-end" />
                     </td>
                   </tr>
                   <tr :v-if="item.subitem">
@@ -202,10 +192,7 @@ if (!items_view.value || !data.value) {
                     <font-awesome-icon icon="fa-square-plus" class="text-2xl" />
                   </button>
                   <button @click="removeRow" class="bottom-0 p-1 print:hidden">
-                    <font-awesome-icon
-                      icon="fa-square-minus"
-                      class="text-2xl"
-                    />
+                    <font-awesome-icon icon="fa-square-minus" class="text-2xl" />
                   </button>
                 </div>
               </tbody>
@@ -214,11 +201,7 @@ if (!items_view.value || !data.value) {
                 <tr class="border bg-gray-100">
                   <td class="p-2" colspan="2"><strong>Subtotal:</strong></td>
                   <td class="p-2 text-end">
-                    <input
-                      size="40"
-                      v-model="totalCost"
-                      class="w-16 bg-transparent text-end"
-                    />
+                    <input size="40" v-model="totalCost" class="w-16 bg-transparent text-end" />
                   </td>
                 </tr>
                 <tr class="border bg-gray-100">
@@ -226,10 +209,7 @@ if (!items_view.value || !data.value) {
                     <strong>Total:</strong>
                   </td>
                   <td class="p-2 text-end">
-                    <input
-                      v-model="totalCost"
-                      class="w-20 bg-transparent text-end text-base font-bold"
-                    />
+                    <input v-model="totalCost" class="w-20 bg-transparent text-end text-base font-bold" />
                   </td>
                 </tr>
               </tfoot>

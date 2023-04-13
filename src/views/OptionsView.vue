@@ -1,5 +1,5 @@
 <script setup lang="ts">
-chrome.storage.local.set({ key: "hello world!" });
+chrome.storage.sync.set({ key: "hello world!" });
 </script>
 
 <template>

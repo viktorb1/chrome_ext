@@ -1,52 +1,38 @@
+import transfer_in_state from "./html_page_data/transfer_in_state";
+import transfer_out_of_state from "./html_page_data/transfer_out_of_state";
+import renewal from "./html_page_data/renewal";
+import revived_junk from "./html_page_data/revived_junk";
+
+import { HTMLData } from "../types";
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message === "clicked-action-button") {
-    console.log("received");
-    const registrationType = document
-      .querySelector(".nav-header")!
-      .textContent?.trim();
+    console.log("you clicked print button");
+    const registrationType = document.querySelector(".nav-header").textContent.trim();
 
+    let toSend: HTMLData;
     if (registrationType == "Transfer In-State") {
-      const vin = document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static")[3].textContent
-
-      const serviceFees = document.querySelector(
-        "#page_modal-collapse-total-other-list dt#label-oth-serv-fee + dd"
-      )!.textContent;
-      const totalAch = document.getElementById("val-total-ach")!.textContent;
-      const lastName = document.querySelector(
-        '.form-group label[for="owner-ind-last-name-1"] + div p'
-      )!.textContent;
-      const firstName = document.querySelector(
-        '.form-group label[for="owner-ind-first-name-1"] + div p'
-      )!.textContent;
-
-      const transactionId = document
-        .querySelector(".tran-id")!
-        .textContent?.substring(9);
-
-      const totalProcessing = document.querySelector(
-        "#val-total-processing"
-      ).textContent;
-
-      const toSend = {
-        date: new Date().toString(),
-        vin: vin.trim(),
-        serviceFees: serviceFees.trim(),
-        totalAch: totalAch.trim(),
-        lastName: lastName.trim(),
-        firstName: firstName.trim(),
-        registrationType: registrationType.trim(),
-        transactionId: transactionId.trim(),
-        totalProcessing: totalProcessing.trim(),
-      };
-
-      console.log("here it is");
-      console.log(toSend);
-      chrome.storage.local.set({ [transactionId!]: toSend }, () => {
-        chrome.storage.local.set({ current: transactionId }, () => {
-          chrome.runtime.sendMessage("new-tab");
-        });
-      });
+      toSend = transfer_in_state();
+    } else if (registrationType == "Transfer Out-of-State") {
+      toSend = transfer_out_of_state();
+    } else if (registrationType == "Renewal") {
+      toSend = renewal();
+    } else if (registrationType == "Revived Junk") {
+      toSend = revived_junk();
+    } else {
+      toSend = transfer_in_state();
     }
+
+    toSend.registrationType = registrationType.trim();
+
+    console.log("collected data from HTML form");
+    console.log(toSend);
+
+    chrome.storage.sync.set({ [toSend.transactionId]: toSend }, () => {
+      chrome.storage.sync.set({ current: toSend.transactionId }, () => {
+        chrome.runtime.sendMessage("new-tab");
+      });
+    });
   }
 });
 
