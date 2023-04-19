@@ -43,8 +43,9 @@ let totalCost = computed(() => {
   return (
     "$" +
     items_view.value
-      .reduce((acc, item) => acc + parseFloat(item.cost), 0)
+      .reduce((acc, item) => acc + parseFloat(item.cost.replace(/(?!\d)\,/g, "")), 0)
       .toFixed(2)
+      .replace(/\d(?=(\d{3})+\.)/g, "$&,")
   );
 });
 
@@ -142,11 +143,15 @@ if (!items_view.value || !data.value) {
       <div class="flex justify-between py-5">
         <div class="flex flex-col">
           <strong>BILL TO:</strong>
-          <address class="pb-4">
-            {{ data.lastName }}, {{ data.firstName }}<br />
+          <address class="pb-4" v-if="data.firstName">
+            {{ data.lastName }}, {{ data.firstName }}
           </address>
-          <p>
-            <strong>VIN: </strong><br />
+          <address v-else>
+            {{ data.lastName }}
+          </address>
+          <br />
+          <p><strong>
+              <input value="VIN:" /><br /></strong>
             <input v-model="data.vin" class="bg-transparent" />
           </p>
         </div>
@@ -201,7 +206,7 @@ if (!items_view.value || !data.value) {
                 <tr class="border bg-gray-100">
                   <td class="p-2" colspan="2"><strong>Subtotal:</strong></td>
                   <td class="p-2 text-end">
-                    <input size="40" v-model="totalCost" class="w-16 bg-transparent text-end" />
+                    <input size="40" v-model="totalCost" class="w-20 bg-transparent text-end" />
                   </td>
                 </tr>
                 <tr class="border bg-gray-100">
@@ -209,7 +214,7 @@ if (!items_view.value || !data.value) {
                     <strong>Total:</strong>
                   </td>
                   <td class="p-2 text-end">
-                    <input v-model="totalCost" class="w-20 bg-transparent text-end text-base font-bold" />
+                    <input v-model="totalCost" class="w-24 bg-transparent text-end text-base font-bold" />
                   </td>
                 </tr>
               </tfoot>
