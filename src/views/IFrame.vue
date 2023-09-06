@@ -157,7 +157,7 @@ if (!items_view.value || !data.value) {
         </div>
         <div class="flex flex-col items-end">
           <p><b>Prime Auto Registration LLC</b></p>
-          <p>4865 Pasadena Avenue #17</p>
+          <p>4865 Pasadena Avenue #11</p>
           <p>Sacramento, CA 95841</p>
           <p>(916) 635-2700</p>
           <p>www.auto-registration.com</p>
