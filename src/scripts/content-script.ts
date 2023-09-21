@@ -2,6 +2,7 @@ import transfer_in_state from "./html_page_data/transfer_in_state";
 import transfer_out_of_state from "./html_page_data/transfer_out_of_state";
 import renewal from "./html_page_data/renewal";
 import revived_junk from "./html_page_data/revived_junk";
+import replacement_credentials from "./html_page_data/replacement_credentials";
 
 import { HTMLData } from "../types";
 
@@ -19,6 +20,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       toSend = renewal();
     } else if (registrationType == "Revived Junk") {
       toSend = revived_junk();
+    } else if (registrationType == "Replacement Credentials") {
+      toSend = replacement_credentials();
     } else {
       toSend = transfer_in_state();
     }
