@@ -4,8 +4,7 @@ export interface HTMLData {
   serviceFees: string;
   totalDMV: string;
   totalAch: string;
-  lastName: string;
-  firstName: string;
+  fullName: string;
   transactionId: string;
   totalProcessing: string;
   registrationType: string;

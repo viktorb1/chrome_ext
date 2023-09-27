@@ -6,8 +6,7 @@ const renewal = () => {
   const serviceFees = document.querySelector("#page_modal-collapse-total-other-list dt#label-oth-serv-fee + dd").textContent;
   const totalAch = document.getElementById("val-total-ach").textContent;
   const totalDMV = document.getElementById("val-total-dmv").textContent;
-  const lastName = titleCase(document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static")[5].textContent).split(" ")[0];
-  const firstName = titleCase(document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static")[5].textContent).split(" ")[1];
+  const fullName = document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static")[5].textContent
   const transactionId = document.querySelector(".tran-id").textContent.substring(9);
   const totalProcessing = document.querySelector("#val-total-processing").textContent;
 
@@ -17,8 +16,7 @@ const renewal = () => {
     serviceFees: serviceFees.trim(),
     totalDMV: totalDMV.trim(),
     totalAch: totalAch.trim(),
-    lastName: lastName.trim(),
-    firstName: firstName.trim(),
+    fullName: fullName.trim(),
     transactionId: transactionId.trim(),
     totalProcessing: totalProcessing.trim(),
     registrationType: "Renewal",

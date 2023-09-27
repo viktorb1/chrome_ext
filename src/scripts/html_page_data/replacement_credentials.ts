@@ -11,14 +11,7 @@ const replacement_credentials = () => {
   const serviceFees = document.querySelector("#page_modal-collapse-total-other-list dt#label-oth-serv-fee + dd").textContent;
   const totalAch = document.getElementById("val-total-ach").textContent;
   const totalDMV = document.getElementById("val-total-dmv").textContent;
-
-  let lastName = "";
-  let firstName = "";
-  let fullName = [];
-
-    fullName = document.querySelector('.form-group:nth-child(4) label.control-label.col-sm-4 + div p').textContent.split(' ');
-    lastName = fullName[0]
-    firstName = fullName[1]
+  const fullName = document.querySelector('.form-group:nth-child(4) label.control-label.col-sm-4 + div p').textContent
 
 
   const transactionId = document.querySelector(".tran-id").textContent.substring(9);
@@ -30,8 +23,7 @@ const replacement_credentials = () => {
     serviceFees: serviceFees.trim(),
     totalAch: totalAch.trim(),
     totalDMV: totalDMV.trim(),
-    lastName: titleCase(lastName).trim(),
-    firstName: titleCase(firstName).trim(),
+    fullName: fullName.trim(),
     transactionId: transactionId.trim(),
     totalProcessing: totalProcessing.trim(),
     registrationType: "Transfer In-State",
