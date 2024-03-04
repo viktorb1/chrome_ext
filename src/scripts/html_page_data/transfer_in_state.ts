@@ -2,11 +2,38 @@ import { titleCase } from "../../utils/common";
 import { HTMLData } from "../../types";
 
 const transfer_in_state = () => {
-  let vin = document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static")[3].textContent;
+  let vin: string = "";
 
-  if (!vin) {
-    vin = document.querySelectorAll("fieldset")[3].querySelectorAll(".form-control-static")[3].textContent;
+  try {
+    vin = document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static")[3].textContent;
+
+    if (!vin) {
+      vin = document.querySelectorAll("fieldset")[3].querySelectorAll(".form-control-static")[3].textContent;
+    }
+  } catch (error) {
+    let elements = document.querySelectorAll("fieldset")[4].querySelectorAll(".form-control-static");
+
+    elements.forEach((element, index) => {
+      if (element.textContent.length == 17) {
+        vin = element.textContent
+      }
+    });
+
+
+    if (!vin) {
+      let elements = document.querySelectorAll("fieldset")[3].querySelectorAll(".form-control-static");
+
+      elements.forEach((element, index) => {
+        if (element.textContent.length == 17) {
+          vin = element.textContent
+        }
+      });
+    }
+
   }
+
+
+  
 
   const serviceFees = document.querySelector("#page_modal-collapse-total-other-list dt#label-oth-serv-fee + dd").textContent;
   const totalAch = document.getElementById("val-total-ach").textContent;
@@ -27,7 +54,7 @@ const transfer_in_state = () => {
 
   const toSend: HTMLData = {
     date: new Date().toString(),
-    vin: vin.trim(),
+    vin: vin.trim().toUpperCase(),
     serviceFees: serviceFees.trim(),
     totalAch: totalAch.trim(),
     totalDMV: totalDMV.trim(),
